@@ -13,6 +13,8 @@ import com.zyx.reggie.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -37,13 +39,12 @@ public class SetmealController {
 
 
     /**
-     * 套餐信息分页查询
-     * 注意：在套餐管理界面，套餐分类字段显示的是categoryId对应的中文，但在数据库里查询到的是categoryId，
-     * 因此需要利用categoryId查询到categoryName，并赋值给数据传输对象SetmealDto
+     * 新增套餐
      * @param setmealDto
      * @return
      */
     @PostMapping
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> save(@RequestBody SetmealDto setmealDto){
         log.info("数据传输对象setmealDto：{}", setmealDto.toString());
 
@@ -51,6 +52,14 @@ public class SetmealController {
         return R.success("新增套餐成功");
     }
 
+
+    /**
+     * 套餐信息分页查询
+     * 注意：在套餐管理界面，套餐分类字段显示的是categoryId对应的中文，但在数据库里查询到的是categoryId，
+     * 因此需要利用categoryId查询到categoryName，并赋值给数据传输对象SetmealDto
+     * @param
+     * @return
+     */
     @GetMapping("/page")
     public R<Page> list(int page, int pageSize, String name){
         //构造分页构造器对象
@@ -87,6 +96,7 @@ public class SetmealController {
         return R.success(setmealDtoPage);
     }
 
+
     /**
      * 套餐批量删除
      * 在套餐管理列表页面点击删除按钮，可以删除对应的套餐信息
@@ -109,10 +119,10 @@ public class SetmealController {
      * @return
      */
     @GetMapping("/list")
+    @Cacheable(value = "setmealCache", key = "#setmeal.categoryId + '_' + #setmeal.status")
     public R<List<Setmeal>> list(Setmeal setmeal){
         log.info("套餐分类信息：{}", setmeal.toString());
         /*这段代码注释原因：此处需求显示套餐分类的下的具体子套餐分类信息，而不是展示再下一层级的子套餐分类中具体的菜品信息
-
         //构造条件查询对象，并添加条件，通过前端传来的categoryId查询setmeal表，获取到对应的套餐信息
         LambdaQueryWrapper<Setmeal> setmealLambdaQueryWrapper = new LambdaQueryWrapper<>();
         setmealLambdaQueryWrapper.eq(setmeal.getCategoryId() != null, Setmeal::getCategoryId, setmeal.getCategoryId());
@@ -135,6 +145,12 @@ public class SetmealController {
         return R.success(setmealList);
     }
 
+
+    /**
+     * 移动端查看套餐详情
+     * @param id
+     * @return
+     */
     @GetMapping("/dish/{id}")
     public R<List<DishDto>> dish(@PathVariable Long id){
         log.info(id.toString());
@@ -172,7 +188,7 @@ public class SetmealController {
      * @return
      */
     @PostMapping("/status/{status}")
-    public R<String> update(@PathVariable("status") Integer status, @RequestParam List<Long> ids){
+    public R<String> updateStatus(@PathVariable("status") Integer status, @RequestParam List<Long> ids){
         log.info("status: {}", status);
         log.info("ids: {}", ids);
 
@@ -181,18 +197,21 @@ public class SetmealController {
         return R.success("套餐状态修改成功");
     }
 
+
     /**
      * 根据套餐id查询套餐基本信息及套餐关联菜品信息
      * @param id
      * @return
      */
     @GetMapping("{id}")
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<SetmealDto> getSetmealById(@PathVariable("id") Long id){
         log.info("id：{}", id);
 
         SetmealDto setmealDto = setmealService.getByIdWithDish(id);
         return R.success(setmealDto);
     }
+
 
     /**
      * 修改套餐信息
@@ -201,6 +220,7 @@ public class SetmealController {
      * @return
      */
     @PutMapping
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> updateWithDish(@RequestBody SetmealDto setmealDto){
         log.info("套餐信息：{}", setmealDto.toString());
         setmealService.updateWithDish(setmealDto);

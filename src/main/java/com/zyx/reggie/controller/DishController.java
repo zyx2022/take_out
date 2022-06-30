@@ -65,6 +65,8 @@ public class DishController {
         return R.success("新增菜品成功");
     }
 
+
+
     /**
      * 菜品信息分页查询
      * 注意：由于后端响应的数据和前端需要的数据存在不一致，导致菜品分类信息无法显示
@@ -87,7 +89,6 @@ public class DishController {
         lambdaQueryWrapper.orderByDesc(Dish::getUpdateTime);
         //4、调用DishService层page()执行分页查询
         dishPage = dishService.page(dishPage, lambdaQueryWrapper);
-
 
         /**对象拷贝
          * BeanUtils.copyProperties(Object source, Object target);
@@ -123,7 +124,6 @@ public class DishController {
             return dishDto;
         }).collect(Collectors.toList());
 
-
         /**
          * Page.class中属性
          * protected List<T> records = Collections.emptyList();
@@ -133,6 +133,7 @@ public class DishController {
 
         return R.success(dishDtoPage);
     }
+
 
     /**
      * 根据id查询菜品，实现数据回显
@@ -163,6 +164,7 @@ public class DishController {
 
         return R.success("修改菜品信息成功");
     }
+
 
     /**
      * 通过菜品分类ID获取菜品列表分类
@@ -234,25 +236,6 @@ public class DishController {
     }
 
 
-//    /**
-//     * 菜品启售和批量停售
-//     * @param status
-//     * @param ids
-//     * @return
-//     */
-//    @PostMapping("/status/{status}")
-//    public R<String> updateStatus(@PathVariable("status") Integer status, Long ids) {
-//
-//        log.info("status：{}", status);
-//        log.info("ids: {}", ids.toString());
-//
-//        boolean updateStatus = dishService.updateStatus(status, ids);
-//        if (updateStatus){
-//            return R.success("菜品状态修改成功");
-//        }
-//        return R.error("菜品状态修改失败");
-//    }
-
     /**
      * 菜品批量启售和批量停售
      *
@@ -290,6 +273,7 @@ public class DishController {
 
         return R.success("菜品状态修改成功");
     }
+
 
     /**
      * 菜品批量删除

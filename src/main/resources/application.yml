@@ -18,6 +18,9 @@ spring:
     port: 6379
     #password: 123456   #连接密码,此处没有开启
     database: 0 #操作的是0号数据库     默认开启16个数据库
+    cache:
+      redis:
+        time-to-live: 180000
     jedis:
       #Redis连接池配置
       pool:
