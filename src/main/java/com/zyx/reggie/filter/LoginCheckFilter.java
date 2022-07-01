@@ -38,7 +38,12 @@ public class LoginCheckFilter implements Filter {
                 "/common/**",
                 //我们在进行手机验证码登录时，发送的请求需要在此过滤器处理时直接放行。
                 "/user/sendMsg",//移动端发送短信
-                "/user/login" //移动端登录
+                "/user/login", //移动端登录
+                "/doc.html",
+                "/webjars/**",
+                "/swagger-resources",
+                "/v2/api-docs"
+
         };
 
 //        判断本次请求是否需要处理

@@ -25,6 +25,7 @@ D:\Study\Java\Code\Project\reggie_take_out_1.0\src\main\java\com\zyx\reggie\filt
 D:\Study\Java\Code\Project\reggie_take_out_1.0\src\main\java\com\zyx\reggie\mapper\AddressBookMapper.java
 D:\Study\Java\Code\Project\reggie_take_out_1.0\src\main\java\com\zyx\reggie\controller\AddressBookController.java
 D:\Study\Java\Code\Project\reggie_take_out_1.0\src\main\java\com\zyx\reggie\service\DishFlavorService.java
+D:\Study\Java\Code\Project\reggie_take_out_1.0\src\main\java\com\zyx\reggie\config\RedisConfig.java
 D:\Study\Java\Code\Project\reggie_take_out_1.0\src\main\java\com\zyx\reggie\common\GlobalExceptionHandler.java
 D:\Study\Java\Code\Project\reggie_take_out_1.0\src\main\java\com\zyx\reggie\service\impl\EmployeeServiceImpl.java
 D:\Study\Java\Code\Project\reggie_take_out_1.0\src\main\java\com\zyx\reggie\config\WebMvcConfig.java
